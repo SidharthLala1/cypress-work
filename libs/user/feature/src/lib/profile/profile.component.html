@@ -1,0 +1,70 @@
+<div class="profile-page">
+    <div class="user-info">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-10 offset-md-1">
+                    <img *ngIf="profile?.image" [src]="profile?.image" class="user-img" />
+                    <h4>{{profile?.username}}</h4>
+                    <p>{{profile?.bio}}</p>
+
+                    <a 
+                        *ngIf="userService?.userInfo?.username === profile?.username; else followBtn" 
+                        class="btn btn-sm btn-outline-secondary action-btn" 
+                        routerLink="/settings"
+                        >
+                        <i class="ion-gear-a"></i> Edit Profile Settings
+                    </a>
+
+                    <ng-template #followBtn>
+                        <button 
+                            class="btn btn-sm action-btn"
+                            [class.btn-outline-secondary]="!profile?.following"
+                            [class.btn-success]="profile?.following"
+                            (click)="toggleFollow(!profile?.following)"
+                            >
+                            <i class="ion-plus-round"></i>
+                            &nbsp;
+                            {{profile?.following ? 'Unfollow' : 'Follow'}} {{profile?.username}}
+                        </button>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-10 offset-md-1">
+                <div class="articles-toggle">
+                    <ul class="nav nav-pills outline-active">
+                        <li class="nav-item">
+                            <a 
+                                class="nav-link" 
+                                [class.active]="tabType==='myArticles'"
+                                [routerLink]="['/@' + profile?.username]"
+                                >My Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a 
+                                class="nav-link" 
+                                [class.active]="tabType==='favoritedArticles'"
+                                [routerLink]="['/@' + profile?.username + '/favorites']"
+                                >Favorited Articles</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ng-container *ngIf="dataSource?.page$ | async as page">
+                    <realworld-list-articles
+                        [articles]="page?.data"
+                        [pageSize]="page?.limit"
+                        [collectionSize]="page?.total" 
+                        [page]="page?.pageIndex+1" 
+                        (pageChange)="dataSource.fetch($event-1)"
+                        (toggleFavorite)="toggleFavorite($event)"
+                        ></realworld-list-articles>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

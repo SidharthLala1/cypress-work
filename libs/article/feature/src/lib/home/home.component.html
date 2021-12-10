@@ -1,0 +1,67 @@
+<div class="home-page">
+    <div class="banner">
+        <div class="container">
+            <h1 class="logo-font">conduit</h1>
+            <p>A place to share your knowledge.</p>
+        </div>
+    </div>
+
+    <div class="container page">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="feed-toggle">
+                    <ul class="nav nav-pills outline-active">
+                        <li class="nav-item" *ngIf="userService?.isAuth">
+                            <a 
+                                class="nav-link" 
+                                [class.active]="feedType==='personal'"
+                                (click)="toggleFeed('personal')"
+                                >Your Feed</a>
+                        </li>
+                        <li class="nav-item">
+                            <a 
+                                class="nav-link" 
+                                [class.active]="feedType==='global'"
+                                (click)="toggleFeed('global')"
+                                >Global Feed</a>
+                        </li>
+                        <li class="nav-item" *ngIf="selectedTag && feedType==='tag'">
+                            <a 
+                                class="nav-link" 
+                                [class.active]="feedType==='tag'"
+                                (click)="toogleFeed('tag')"
+                                >#{{selectedTag}}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ng-container *ngIf="dataSource?.page$ | async as page">
+                    <realworld-list-articles
+                        [articles]="page?.data"
+                        [pageSize]="page?.limit"
+                        [collectionSize]="page?.total" 
+                        [page]="page?.pageIndex+1" 
+                        (pageChange)="dataSource.fetch($event-1)"
+                        (toggleFavorite)="toggleFavorite($event)"
+                        ></realworld-list-articles>
+                </ng-container>
+            </div>
+
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <p>Popular Tags</p>
+                    <div class="tag-list">
+                        <a 
+                            *ngFor="let t of tags$|async" 
+                            class="tag-pill tag-default btn"
+                            [class.tag-success]="t === selectedTag"
+                            (click)="toggleFeed('tag', t)"
+                            >{{t}}</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

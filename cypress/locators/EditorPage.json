@@ -1,0 +1,15 @@
+{
+	"new_article": ".container > .nav > .nav-item.ng-star-inserted > .nav-link",
+	"article_title": "input[placeholder='Article Title']",
+	"article_about": ":nth-child(2) > .form-control",
+	"article_markdown": ":nth-child(3) > .form-control",
+	"article_tags": "input[placeholder='Enter tags']",
+	"publish_article": ".btn",
+	"article_created_message": ".content-body",
+	"added_title": "h1",
+	"added_about": ".col-md-12 > :nth-child(1)",
+	"added_markdown": "p",
+	"added_tags": ".tag-default",
+	"delete_article_btn": ".btn-outline-danger",
+	"article_delete_message": ".content-body"
+}

@@ -1,0 +1,942 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "conduit",
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "projects": {
+    "conduit": {
+      "projectType": "application",
+      "root": "apps/conduit",
+      "sourceRoot": "apps/conduit/src",
+      "prefix": "realworld",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/conduit",
+            "index": "apps/conduit/src/index.html",
+            "main": "apps/conduit/src/main.ts",
+            "polyfills": "apps/conduit/src/polyfills.ts",
+            "tsConfig": "apps/conduit/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/conduit/src/favicon.ico",
+              "apps/conduit/src/assets"
+            ],
+            "styles": ["apps/conduit/src/styles.scss"],
+            "scripts": [],
+            "allowedCommonJsDependencies": ["r7insight_js", "validator"]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/conduit/src/environments/environment.ts",
+                  "with": "apps/conduit/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "conduit:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "conduit:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "conduit:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/conduit/src/**/*.ts",
+              "apps/conduit/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/conduit"],
+          "options": {
+            "jestConfig": "apps/conduit/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "conduit-e2e": {
+      "root": "apps/conduit-e2e",
+      "sourceRoot": "apps/conduit-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/conduit-e2e/cypress.json",
+            "tsConfig": "apps/conduit-e2e/tsconfig.e2e.json",
+            "devServerTarget": "conduit:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "conduit:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/conduit-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "prefix": "api",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "assets": ["apps/api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/api"],
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-api-core": {
+      "root": "libs/shared/api/core",
+      "sourceRoot": "libs/shared/api/core/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/api/core/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/api/core"],
+          "options": {
+            "jestConfig": "libs/shared/api/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-api-constants": {
+      "root": "libs/shared/api/constants",
+      "sourceRoot": "libs/shared/api/constants/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/api/constants/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/api/constants"],
+          "options": {
+            "jestConfig": "libs/shared/api/constants/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-api-error-handler": {
+      "root": "libs/shared/api/error-handler",
+      "sourceRoot": "libs/shared/api/error-handler/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/api/error-handler/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/api/error-handler"],
+          "options": {
+            "jestConfig": "libs/shared/api/error-handler/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-api-foundation": {
+      "root": "libs/shared/api/foundation",
+      "sourceRoot": "libs/shared/api/foundation/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/api/foundation/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/api/foundation"],
+          "options": {
+            "jestConfig": "libs/shared/api/foundation/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-api-config": {
+      "root": "libs/shared/api/config",
+      "sourceRoot": "libs/shared/api/config/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/api/config/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/api/config"],
+          "options": {
+            "jestConfig": "libs/shared/api/config/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-api-validations": {
+      "root": "libs/shared/api/validations",
+      "sourceRoot": "libs/shared/api/validations/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/api/validations/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/api/validations"],
+          "options": {
+            "jestConfig": "libs/shared/api/validations/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-client-server": {
+      "root": "libs/shared/client-server",
+      "sourceRoot": "libs/shared/client-server/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/client-server/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/client-server"],
+          "options": {
+            "jestConfig": "libs/shared/client-server/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-constants": {
+      "root": "libs/shared/constants",
+      "sourceRoot": "libs/shared/constants/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/constants/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/constants"],
+          "options": {
+            "jestConfig": "libs/shared/constants/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-common": {
+      "projectType": "library",
+      "root": "libs/shared/common",
+      "sourceRoot": "libs/shared/common/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/common/src/**/*.ts",
+              "libs/shared/common/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/common"],
+          "options": {
+            "jestConfig": "libs/shared/common/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-configuration": {
+      "projectType": "library",
+      "root": "libs/shared/configuration",
+      "sourceRoot": "libs/shared/configuration/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/configuration/src/**/*.ts",
+              "libs/shared/configuration/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/configuration"],
+          "options": {
+            "jestConfig": "libs/shared/configuration/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-directives": {
+      "projectType": "library",
+      "root": "libs/shared/directives",
+      "sourceRoot": "libs/shared/directives/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/directives/src/**/*.ts",
+              "libs/shared/directives/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/directives"],
+          "options": {
+            "jestConfig": "libs/shared/directives/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-error-handler": {
+      "projectType": "library",
+      "root": "libs/shared/error-handler",
+      "sourceRoot": "libs/shared/error-handler/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/error-handler/src/**/*.ts",
+              "libs/shared/error-handler/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/error-handler"],
+          "options": {
+            "jestConfig": "libs/shared/error-handler/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-foundation": {
+      "projectType": "library",
+      "root": "libs/shared/foundation",
+      "sourceRoot": "libs/shared/foundation/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/foundation/src/**/*.ts",
+              "libs/shared/foundation/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/foundation"],
+          "options": {
+            "jestConfig": "libs/shared/foundation/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-interceptors": {
+      "projectType": "library",
+      "root": "libs/shared/interceptors",
+      "sourceRoot": "libs/shared/interceptors/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/interceptors/src/**/*.ts",
+              "libs/shared/interceptors/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/interceptors"],
+          "options": {
+            "jestConfig": "libs/shared/interceptors/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-loading": {
+      "projectType": "library",
+      "root": "libs/shared/loading",
+      "sourceRoot": "libs/shared/loading/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/loading/src/**/*.ts",
+              "libs/shared/loading/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/loading"],
+          "options": {
+            "jestConfig": "libs/shared/loading/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-logging": {
+      "projectType": "library",
+      "root": "libs/shared/logging",
+      "sourceRoot": "libs/shared/logging/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/logging/src/**/*.ts",
+              "libs/shared/logging/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/logging"],
+          "options": {
+            "jestConfig": "libs/shared/logging/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-notification": {
+      "projectType": "library",
+      "root": "libs/shared/notification",
+      "sourceRoot": "libs/shared/notification/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/notification/src/**/*.ts",
+              "libs/shared/notification/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/notification"],
+          "options": {
+            "jestConfig": "libs/shared/notification/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-spinner": {
+      "projectType": "library",
+      "root": "libs/shared/spinner",
+      "sourceRoot": "libs/shared/spinner/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/spinner/src/**/*.ts",
+              "libs/shared/spinner/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/spinner"],
+          "options": {
+            "jestConfig": "libs/shared/spinner/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-storage": {
+      "projectType": "library",
+      "root": "libs/shared/storage",
+      "sourceRoot": "libs/shared/storage/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/storage/src/**/*.ts",
+              "libs/shared/storage/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/storage"],
+          "options": {
+            "jestConfig": "libs/shared/storage/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-toaster": {
+      "projectType": "library",
+      "root": "libs/shared/toaster",
+      "sourceRoot": "libs/shared/toaster/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/toaster/src/**/*.ts",
+              "libs/shared/toaster/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/toaster"],
+          "options": {
+            "jestConfig": "libs/shared/toaster/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-core": {
+      "projectType": "library",
+      "root": "libs/shared/core",
+      "sourceRoot": "libs/shared/core/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/core/src/**/*.ts",
+              "libs/shared/core/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/core"],
+          "options": {
+            "jestConfig": "libs/shared/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-string-util": {
+      "root": "libs/shared/string-util",
+      "sourceRoot": "libs/shared/string-util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/string-util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/string-util"],
+          "options": {
+            "jestConfig": "libs/shared/string-util/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "user-api-shared": {
+      "root": "libs/user/api/shared",
+      "sourceRoot": "libs/user/api/shared/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/user/api/shared/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user/api/shared"],
+          "options": {
+            "jestConfig": "libs/user/api/shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "user-api-handlers": {
+      "root": "libs/user/api/handlers",
+      "sourceRoot": "libs/user/api/handlers/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/user/api/handlers/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user/api/handlers"],
+          "options": {
+            "jestConfig": "libs/user/api/handlers/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "user-api-interfaces": {
+      "root": "libs/user/api-interfaces",
+      "sourceRoot": "libs/user/api-interfaces/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/user/api-interfaces/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user/api-interfaces"],
+          "options": {
+            "jestConfig": "libs/user/api-interfaces/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "user-feature": {
+      "projectType": "library",
+      "root": "libs/user/feature",
+      "sourceRoot": "libs/user/feature/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/user/feature/src/**/*.ts",
+              "libs/user/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user/feature"],
+          "options": {
+            "jestConfig": "libs/user/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "user-shared": {
+      "projectType": "library",
+      "root": "libs/user/shared",
+      "sourceRoot": "libs/user/shared/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/user/shared/src/**/*.ts",
+              "libs/user/shared/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user/shared"],
+          "options": {
+            "jestConfig": "libs/user/shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "article-api-shared": {
+      "root": "libs/article/api/shared",
+      "sourceRoot": "libs/article/api/shared/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/article/api/shared/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/article/api/shared"],
+          "options": {
+            "jestConfig": "libs/article/api/shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "article-api-handlers": {
+      "root": "libs/article/api/handlers",
+      "sourceRoot": "libs/article/api/handlers/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/article/api/handlers/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/article/api/handlers"],
+          "options": {
+            "jestConfig": "libs/article/api/handlers/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "article-api-interfaces": {
+      "root": "libs/article/api-interfaces",
+      "sourceRoot": "libs/article/api-interfaces/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/article/api-interfaces/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/article/api-interfaces"],
+          "options": {
+            "jestConfig": "libs/article/api-interfaces/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "article-shared": {
+      "projectType": "library",
+      "root": "libs/article/shared",
+      "sourceRoot": "libs/article/shared/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/article/shared/src/**/*.ts",
+              "libs/article/shared/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/article/shared"],
+          "options": {
+            "jestConfig": "libs/article/shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "article-feature": {
+      "projectType": "library",
+      "root": "libs/article/feature",
+      "sourceRoot": "libs/article/feature/src",
+      "prefix": "realworld",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/article/feature/src/**/*.ts",
+              "libs/article/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/article/feature"],
+          "options": {
+            "jestConfig": "libs/article/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  }
+}

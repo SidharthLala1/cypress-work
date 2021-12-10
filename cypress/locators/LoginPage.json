@@ -1,0 +1,13 @@
+{
+	"banner": ".banner > .container > .logo-font",
+	"banner_text": ".container > p",
+	"signinBtn": ":nth-child(3) > .nav-link",
+	"signupBtn": ":nth-child(4) > .nav-link",
+	"homeBtn": ".container > .nav > :nth-child(1) > .nav-link",
+	"email": "input[placeholder=Email]",
+	"password": "input[name='password']",
+	"signIn_Btn": ".btn",
+	"sign_message": ".content-body",
+	"profile_name": ":nth-child(6) > .nav-link",
+	"settings_tab": ":nth-child(3) > .nav-link"
+}

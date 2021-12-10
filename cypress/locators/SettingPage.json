@@ -1,0 +1,10 @@
+{
+	"profile_picture": ":nth-child(1) > .form-control",
+	"username": "input[placeholder=Username]",
+	"bio": ":nth-child(3) > .form-control",
+	"email_input": ":nth-child(4) > .form-control",
+	"password_input": ":nth-child(5) > .form-control",
+	"update_settings_btn": "form.ng-dirty > :nth-child(1) > .btn",
+	"logout_btn": ".btn-outline-danger",
+	"profile_message": ".content-body"
+}

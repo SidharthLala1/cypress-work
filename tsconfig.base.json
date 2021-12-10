@@ -1,0 +1,77 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@realworld/shared/api/core": ["libs/shared/api/core/src/index.ts"],
+      "@realworld/shared/api/constants": [
+        "libs/shared/api/constants/src/index.ts"
+      ],
+      "@realworld/shared/api/error-handler": [
+        "libs/shared/api/error-handler/src/index.ts"
+      ],
+      "@realworld/shared/api/foundation": [
+        "libs/shared/api/foundation/src/index.ts"
+      ],
+      "@realworld/shared/api/config": ["libs/shared/api/config/src/index.ts"],
+      "@realworld/shared/api/validations": [
+        "libs/shared/api/validations/src/index.ts"
+      ],
+      "@realworld/shared/client-server": [
+        "libs/shared/client-server/src/index.ts"
+      ],
+      "@realworld/shared/constants": ["libs/shared/constants/src/index.ts"],
+      "@realworld/shared/common": ["libs/shared/common/src/index.ts"],
+      "@realworld/shared/configuration": [
+        "libs/shared/configuration/src/index.ts"
+      ],
+      "@realworld/shared/directives": ["libs/shared/directives/src/index.ts"],
+      "@realworld/shared/error-handler": [
+        "libs/shared/error-handler/src/index.ts"
+      ],
+      "@realworld/shared/foundation": ["libs/shared/foundation/src/index.ts"],
+      "@realworld/shared/interceptors": [
+        "libs/shared/interceptors/src/index.ts"
+      ],
+      "@realworld/shared/loading": ["libs/shared/loading/src/index.ts"],
+      "@realworld/shared/logging": ["libs/shared/logging/src/index.ts"],
+      "@realworld/shared/notification": [
+        "libs/shared/notification/src/index.ts"
+      ],
+      "@realworld/shared/spinner": ["libs/shared/spinner/src/index.ts"],
+      "@realworld/shared/storage": ["libs/shared/storage/src/index.ts"],
+      "@realworld/shared/toaster": ["libs/shared/toaster/src/index.ts"],
+      "@realworld/shared/core": ["libs/shared/core/src/index.ts"],
+      "@realworld/shared/string-util": ["libs/shared/string-util/src/index.ts"],
+      "@realworld/user/api/shared": ["libs/user/api/shared/src/index.ts"],
+      "@realworld/user/api/handlers": ["libs/user/api/handlers/src/index.ts"],
+      "@realworld/user/api-interfaces": [
+        "libs/user/api-interfaces/src/index.ts"
+      ],
+      "@realworld/user/feature": ["libs/user/feature/src/index.ts"],
+      "@realworld/user/shared": ["libs/user/shared/src/index.ts"],
+      "@realworld/article/api/shared": ["libs/article/api/shared/src/index.ts"],
+      "@realworld/article/api/handlers": [
+        "libs/article/api/handlers/src/index.ts"
+      ],
+      "@realworld/article/api-interfaces": [
+        "libs/article/api-interfaces/src/index.ts"
+      ],
+      "@realworld/article/shared": ["libs/article/shared/src/index.ts"],
+      "@realworld/article/feature": ["libs/article/feature/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

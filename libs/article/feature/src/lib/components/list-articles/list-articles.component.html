@@ -1,0 +1,21 @@
+<ng-container *ngIf="articles?.length; else noPosts;">
+    <realworld-article-item 
+        *ngFor="let item of articles"
+        [article]="item"
+        (toggleFavorite)="toggleFavorite.emit($event)"
+        ></realworld-article-item>
+    <div class="row" *ngIf="collectionSize > pageSize">
+        <div class="col-12">
+          <ngb-pagination 
+            [pageSize]="pageSize"
+            [collectionSize]="collectionSize"
+            [page]="page" 
+            (pageChange)="pageChange.emit($event)"
+            ></ngb-pagination>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #noPosts>
+    <ng-container>Nothing to display.</ng-container>
+</ng-template>
