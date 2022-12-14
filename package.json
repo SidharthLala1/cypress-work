@@ -53,7 +53,7 @@
 		"@nestjs/core": "^7.0.0",
 		"@nestjs/jwt": "^7.2.0",
 		"@nestjs/passport": "^7.1.5",
-		"@nestjs/platform-express": "^7.0.0",
+		"@nestjs/platform-express": "^9.2.1",
 		"@nestjs/typeorm": "^7.1.5",
 		"@ng-bootstrap/ng-bootstrap": "^9.1.0",
 		"@ng-web-apis/common": "^1.9.0",
